@@ -1,0 +1,20 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "cannon": "^0.6.2",
+    "nuxt": "^3.13.0",
+    "three": "^0.167.1",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "three-mesh-ui": "^6.5.4"
+  }
+}

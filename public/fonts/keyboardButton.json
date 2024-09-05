@@ -1,0 +1,84 @@
+{
+    "keyboard": [
+      {
+        "row": 1,
+        "keys": [
+          {"label": "``", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "1", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "2", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "3", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "4", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "5", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "6", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "7", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "8", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "9", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "0", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "-", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "+", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "Backspace", "width": 0.025, "height": 0.025, "depth": 0.1}
+        ]
+      },
+      {
+        "row": 2,
+        "keys": [
+          {"label": "Tab", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "Q", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "W", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "E", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "R", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "T", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "Y", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "U", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "I", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "O", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "P", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "{", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "}", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "\\", "width": 0.025, "height": 0.025, "depth": 0.1}
+        ]
+      },
+      {
+        "row": 3,
+        "keys": [
+          {"label": "Caps Lock", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "A", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "S", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "D", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "F", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "G", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "H", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "J", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "K", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "L", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": ";", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "'", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "Enter", "width": 0.03, "height": 0.025, "depth": 0.1}
+        ]
+      },
+      {
+        "row": 4,
+        "keys": [
+          {"label": "Shift", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "Z", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "X", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "C", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "V", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "B", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "N", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "M", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": ",", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": ".", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "?", "width": 0.025, "height": 0.025, "depth": 0.1},
+          {"label": "Shift", "width": 0.025, "height": 0.025, "depth": 0.1}
+        ]
+      },
+      {
+        "row": 5,
+        "keys": [
+          {"label": "Space", "width": 0.1, "height": 0.025, "depth": 0.1}
+        ]
+      }
+    ]
+  }
+  
