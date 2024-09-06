@@ -2,6 +2,19 @@
 
 This repository contains a Three.js WebXR application that demonstrates hand tracking interactions, dynamic UI elements, and animations within a VR environment. The project leverages Three.js, WebXR APIs, and GLTFLoader to load 3D models, track hand movements, and render animations.
 
+- [Three.js WebXR Application with Hand Tracking and Animations](#threejs-webxr-application-with-hand-tracking-and-animations)
+  - [Key Features:](#key-features)
+  - [Code Highlights:](#code-highlights)
+  - [Getting Started:](#getting-started)
+  - [Usage](#usage)
+    - [Hand Interaction](#hand-interaction)
+    - [Model Loading](#model-loading)
+    - [Animation Handling](#animation-handling)
+    - [Code Overview](#code-overview)
+  - [Technologies Used :](#technologies-used-)
+  - [Contributing](#contributing)
+  - [License](#license)
+  
 ### Key Features:
 1. ***Hand Tracking with WebXR***: Integrates hand tracking using WebXR to enable interactions via hand controllers. Users can interact with UI elements such as buttons through raycasting.
 
