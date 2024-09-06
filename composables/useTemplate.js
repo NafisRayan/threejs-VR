@@ -6,10 +6,27 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 export const useTemplate = () => {
     let initScene, initRenderer, initCamera, initController1, initController2;
     let initRoom, initControls;
-    let initRaycaster;
+    let initRaycaster, initIntersection, initMarker, initFloor, baseReferenceSpace ;
+
+    let select = false;
+
+    const onSelectStart = () => {
+        select = true;
+    }
+
+    const onSelectEnd = () => {
+        select = false;
+        if (initIntersection) {
+            const offsetPosition = { x: - INTERSECTION.x, y: - INTERSECTION.y, z: - INTERSECTION.z, w: 1 };
+            const offsetRotation = new THREE.Quaternion();
+            const transform = new XRRigidTransform(offsetPosition, offsetRotation);
+            const teleportSpaceOffset = baseReferenceSpace.getOffsetReferenceSpace(transform);
+
+            initRenderer.xr.setReferenceSpace(teleportSpaceOffset);
+        }
+    }
 
     // raycaster
-
     initRaycaster = new THREE.Raycaster();
 
     // Scene
@@ -37,7 +54,22 @@ export const useTemplate = () => {
     initRenderer = new THREE.WebGLRenderer({ antialias: true });
     initRenderer.setPixelRatio(window.devicePixelRatio);
     initRenderer.setSize(window.innerWidth, window.innerHeight);
+    initRenderer.xr.addEventListener( 'sessionstart', () => baseReferenceSpace = initRenderer.xr.getReferenceSpace() );
     initRenderer.xr.enabled = true;
+
+    // marker
+    initMarker = new THREE.Mesh(
+        new THREE.CircleGeometry( 0.25, 32 ).rotateX( - Math.PI / 2 ),
+        new THREE.MeshBasicMaterial( { color: 0xbcbcbc } )
+    );
+    initScene.add( initMarker );
+
+    // floor
+    initFloor = new THREE.Mesh(
+        new THREE.PlaneGeometry( 6, 6, 2, 2 ).rotateX( - Math.PI / 2 ),
+        new THREE.MeshBasicMaterial( { color: 0xbcbcbc, transparent: true, opacity: 0.25 } )
+    );
+    initScene.add( initFloor );
 
     // Kontrol orbit
     initControls = new OrbitControls(initCamera, initRenderer.domElement);
@@ -46,10 +78,36 @@ export const useTemplate = () => {
     // controller
     initController1 = initRenderer.xr.getController(0);
     initController2 = initRenderer.xr.getController(1);
+
+    initController1.addEventListener('selectstart', onSelectStart);
+    initController1.addEventListener('selectend', onSelectEnd);
+    initController1.addEventListener('connected', function (event) {
+
+        this.add(buildController(event.data));
+
+    });
+    initController1.addEventListener('disconnected', function () {
+
+        this.remove(this.children[0]);
+
+    });
+    initController2.addEventListener('selectstart', onSelectStart);
+    initController2.addEventListener('selectend', onSelectEnd);
+    initController2.addEventListener('connected', function (event) {
+
+        this.add(buildController(event.data));
+
+    });
+    initController2.addEventListener('disconnected', function () {
+
+        this.remove(this.children[0]);
+
+    });
+
     initScene.add(initController1);
     initScene.add(initController2);
 
-    function _create(Container) {
+    const _create = (Container) => {
         // VR
         const sessionInit = {
             requiredFeatures: ['hand-tracking']
@@ -60,6 +118,31 @@ export const useTemplate = () => {
     }
 
 
+
+    const buildController = (data) => {
+        let geometry, material;
+
+        switch (data.targetRayMode) {
+
+            case 'tracked-pointer':
+
+                geometry = new THREE.BufferGeometry();
+                geometry.setAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, - 1], 3));
+                geometry.setAttribute('color', new THREE.Float32BufferAttribute([0.5, 0.5, 0.5, 0, 0, 0], 3));
+
+                material = new THREE.LineBasicMaterial({ vertexColors: true, blending: THREE.AdditiveBlending });
+
+                return new THREE.Line(geometry, material);
+
+            case 'gaze':
+
+                geometry = new THREE.RingGeometry(0.02, 0.04, 32).translate(0, 0, - 1);
+                material = new THREE.MeshBasicMaterial({ opacity: 0.5, transparent: true });
+                return new THREE.Mesh(geometry, material);
+
+        }
+    }
+
     return {
         _create,
         initScene,
@@ -69,6 +152,11 @@ export const useTemplate = () => {
         initRoom,
         initRaycaster,
         initController1,
-        initController2
+        initController2,
+        initIntersection,
+        initMarker,
+        initFloor
     }
 }
+
+
