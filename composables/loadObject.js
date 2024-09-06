@@ -12,6 +12,7 @@ import * as THREE from 'three';
  * @param {object} world - Dunia (world) tempat model akan ditambahkan.
  * @param {object} [options={}] - Opsi tambahan dengan nilai default.
  * @param {number} [scale=1] - Skala model saat di-load.
+ * @param {THREE.Vector3} [position={ x: 0, y: 0, z: 0}] - posistion object
  * @param {function} callback - Fungsi callback yang akan dipanggil setelah model dimuat.
  */
 export const loadModel = (filePath, world, options = {}, scale = 1, position = { x: 0, y: 0, z: 0 }, callback) => {
@@ -59,7 +60,7 @@ export const loadModel = (filePath, world, options = {}, scale = 1, position = {
                 }
                 if (isObject && loadedModel.scene) {
                     entity.addComponent(Object3D, { object: loadedModel.scene });
-                    
+
                     loadedModel.scene.position.x = position.x;
                     loadedModel.scene.position.y = position.y;
                     loadedModel.scene.position.z = position.z;
