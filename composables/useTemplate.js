@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 export const useTemplate = () => {
     let initScene, initRenderer, initCamera, initController1, initController2;
     let initRoom, initControls;
-    let initRaycaster, initIntersection, initMarker, initFloor, baseReferenceSpace ;
+    let initRaycaster, initIntersection, initMarker, initFloor, baseReferenceSpace;
 
     let select = false;
 
@@ -54,22 +54,24 @@ export const useTemplate = () => {
     initRenderer = new THREE.WebGLRenderer({ antialias: true });
     initRenderer.setPixelRatio(window.devicePixelRatio);
     initRenderer.setSize(window.innerWidth, window.innerHeight);
-    initRenderer.xr.addEventListener( 'sessionstart', () => baseReferenceSpace = initRenderer.xr.getReferenceSpace() );
+    initRenderer.xr.addEventListener('sessionstart', () => {
+        baseReferenceSpace = initRenderer.xr.getReferenceSpace();
+    });
     initRenderer.xr.enabled = true;
 
     // marker
     initMarker = new THREE.Mesh(
-        new THREE.CircleGeometry( 0.25, 32 ).rotateX( - Math.PI / 2 ),
-        new THREE.MeshBasicMaterial( { color: 0xbcbcbc } )
+        new THREE.CircleGeometry(0.25, 32).rotateX(- Math.PI / 2),
+        new THREE.MeshBasicMaterial({ color: 0xbcbcbc })
     );
-    initScene.add( initMarker );
+    initScene.add(initMarker);
 
     // floor
     initFloor = new THREE.Mesh(
-        new THREE.PlaneGeometry( 6, 6, 2, 2 ).rotateX( - Math.PI / 2 ),
-        new THREE.MeshBasicMaterial( { color: 0xbcbcbc, transparent: true, opacity: 0.25 } )
+        new THREE.PlaneGeometry(6, 6, 2, 2).rotateX(- Math.PI / 2),
+        new THREE.MeshBasicMaterial({ color: 0xbcbcbc, transparent: true, opacity: 0.25 })
     );
-    initScene.add( initFloor );
+    initScene.add(initFloor);
 
     // Kontrol orbit
     initControls = new OrbitControls(initCamera, initRenderer.domElement);
