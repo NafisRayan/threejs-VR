@@ -52,7 +52,6 @@ export class HandRaySystem extends System {
                     }
 
                 }
-
                 if (intersectingEntity.hasComponent(Draggable)) {
 
                     const draggable = intersectingEntity.getMutableComponent(Draggable);

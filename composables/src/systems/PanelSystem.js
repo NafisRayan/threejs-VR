@@ -1,6 +1,9 @@
 import { System } from 'three/addons/libs/ecsy.module.js';
 import * as THREE from 'three';
 import { Panel } from '../components/PanelComponent.js';
+import { Object3D } from '../components/Object3DComponent.js';
+import { Draggable } from '../components/DraggableComponent.js';
+import { Intersectable } from '../components/intersectableComponent.js';
 
 export class PanelSystem extends System {
   init({ panel }) {
@@ -12,6 +15,7 @@ export class PanelSystem extends System {
 
     this.panelMeshes = [];
     this.createPanel();
+
   }
 
   execute() {
@@ -40,6 +44,7 @@ export class PanelSystem extends System {
       this.height = p.height !== undefined ? p.height : Panel.schema.height.default;
       this.color = p.color !== undefined ? p.color : Panel.schema.color.default;
       this.scene = p.scene || this.scene;
+      this.world = p.world || this.world;
       this.renderer = p.renderer || this.renderer;
       this.camera = p.camera || this.camera;
       this.isSide = p.isSide !== undefined ? p.isSide : Panel.schema.isSide.default;
@@ -53,6 +58,8 @@ export class PanelSystem extends System {
     if (this.layers > 3) {
       console.warn("Layers harus kurang dari 3");
     } else {
+      
+      const panelEntity = this.world.createEntity();
       for (let i = 0; i < this.layers; i++) {
         const geometry = new THREE.PlaneGeometry(this.width, this.height);
         const side = this.isSide === true ? THREE.DoubleSide : THREE.FrontSide;
@@ -73,7 +80,6 @@ export class PanelSystem extends System {
             panel.position.set(this.position.x + xOffset, this.position.y, this.position.z);
           }
         }
-
         this.panelGroup.add(panel);
         this.panelMeshes.push(
           {
@@ -84,10 +90,13 @@ export class PanelSystem extends System {
           }
         );
       }
-
       if (this.menuContainer !== null) {
         panel.add(this.menuContainer)
       }
+      
+      panelEntity.addComponent(Object3D, { object: this.panelGroup });
+      panelEntity.addComponent(Intersectable);
+      panelEntity.addComponent(Draggable);
     }
   }
 

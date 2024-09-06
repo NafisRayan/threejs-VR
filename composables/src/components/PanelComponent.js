@@ -6,6 +6,7 @@ Panel.schema = {
     width: { type: Types.Number, default: 0.53 },
     height: { type: Types.Number, default: 0.3 },
     scene: { type: Types.Ref},
+    world: { type: Types.Ref},
     renderer: { type: Types.Ref},
     camera: { type: Types.Ref},
     color: { type: Types.String, default: '#00ff00' },

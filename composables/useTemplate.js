@@ -155,7 +155,6 @@ export const useTemplate = () => {
         initRaycaster,
         initController1,
         initController2,
-        initIntersection,
         initFloor
     }
 }

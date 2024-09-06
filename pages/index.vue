@@ -6,6 +6,9 @@ import { loadModel } from '../composables/loadObject.js';
 import { useHand } from '../composables/useHand.js';
 import { register } from '../composables/src/helpers/register.js';
 import { createText } from 'three/addons/webxr/Text2D.js';
+import { Intersectable } from '../composables/src/components/intersectableComponent.js';
+import { Object3D } from '../composables/src/components/Object3DComponent.js';
+import { Draggable } from '../composables/src/components/DraggableComponent.js';
 
 const container = ref(null);
 let scene, renderer, camera, controls, room, raycaster;
@@ -37,7 +40,7 @@ onMounted(() => {
 
 
 const _template = () => {
-    const { _create, initScene, initRenderer, initCamera, initControls, initRoom, initRaycaster, initController1, initController2, initIntersection, initFloor } = useTemplate();
+    const { _create, initScene, initRenderer, initCamera, initControls, initRoom, initRaycaster, initController1, initController2, initFloor } = useTemplate();
 
     scene = initScene;
     renderer = initRenderer;
@@ -47,10 +50,14 @@ const _template = () => {
     room = initRoom;
     controller1 = initController1;
     controller2 = initController2;
-    INTERSECTION = initIntersection;
     floor = initFloor;
 
     _create(container.value);
+
+
+
+
+    window.addEventListener('resize', onWindowResize);
 }
 
 const makeButtonMesh = (x, y, z, color) => {
@@ -79,7 +86,7 @@ const createButton = () => {
     menuMesh.add(exitButton);
 
     exitText = createText('Exiting session...', 0.04);
-    exitText.position.set(0, 1.5, - 0.05);
+    exitText.position.set(-0.5, 2, - 1.07);
     exitText.visible = false;
     scene.add(exitText);
 
@@ -102,12 +109,21 @@ const createButton = () => {
 
 
 const loadedObject = () => {
+    const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.15 / 10), new THREE.MeshLambertMaterial({ color: 0xffffff }));
+    cube.position.set(0, 2, 0);
+    scene.add(cube);
+
+    const entity = world.createEntity();
+    entity.addComponent(Intersectable);
+    entity.addComponent(Object3D, { object: cube });
+    entity.addComponent(Draggable);
+
     const options = {
         requiredFeatures: ['handRay'],
         isObject: true,
         isPhysique: false
     };
-    loadModel('/3d-object/bipedal_mech/scene.gltf', world, options, .2, {x: 1.5, y:0, z:-2}, (model) => {
+    loadModel('/3d-object/bipedal_mech/scene.gltf', world, options, .2, { x: 1.5, y: 0, z: -2 }, (model) => {
         object = model.scene;
         scene.add(object);
 
@@ -212,11 +228,12 @@ const createHand = () => {
         layers: 3,
         color: '#1A1A1A',
         scene: scene,
+        world: world,
         renderer: renderer,
         isSide: true,
         camera: camera,
         padding: 0.025,
-        position: { x: -1.5, y: 2, z: -2 }, // position: { x: 1, y: 2, z: -2 },
+        position: { x: -0.5, y: 2, z: -1 }, // position: { x: 1, y: 2, z: -2 },
         rotation: { x: 0, y: 0, z: 0 }, // rotation: { x: 0, y: -90, z: 0 },
         menuContainer: menuMesh
     }
@@ -277,6 +294,16 @@ const animate = () => {
 
         renderer.render(scene, camera);
     });
+}
+
+
+const onWindowResize = () => {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
 }
 </script>
 

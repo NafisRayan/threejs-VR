@@ -56,8 +56,6 @@ export const register = (world, options) => {
 
                 const panelEntity = world.createEntity();
                 panelEntity.addComponent(Panel, ...options.panel);
-                const object = world.getSystem(PanelSystem).getPanelGroup();
-                panelEntity.addComponent(Object3D, { object: object });
                 break;
 
             default:
