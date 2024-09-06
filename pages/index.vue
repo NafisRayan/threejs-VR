@@ -37,7 +37,7 @@ onMounted(() => {
 
 
 const _template = () => {
-    const { _create, initScene, initRenderer, initCamera, initControls, initRoom, initRaycaster, initController1, initController2, initIntersection, initMarker, initFloor } = useTemplate();
+    const { _create, initScene, initRenderer, initCamera, initControls, initRoom, initRaycaster, initController1, initController2, initIntersection, initFloor } = useTemplate();
 
     scene = initScene;
     renderer = initRenderer;
@@ -48,7 +48,6 @@ const _template = () => {
     controller1 = initController1;
     controller2 = initController2;
     INTERSECTION = initIntersection;
-    marker = initMarker;
     floor = initFloor;
 
     _create(container.value);
@@ -108,7 +107,7 @@ const loadedObject = () => {
         isObject: true,
         isPhysique: false
     };
-    loadModel('/3d-object/bipedal_mech/scene.gltf', world, options, .2, (model) => {
+    loadModel('/3d-object/bipedal_mech/scene.gltf', world, options, .2, {x: 1.5, y:0, z:-2}, (model) => {
         object = model.scene;
         scene.add(object);
 
@@ -217,8 +216,8 @@ const createHand = () => {
         isSide: true,
         camera: camera,
         padding: 0.025,
-        position: { x: 1, y: 2, z: -0.5 }, // position: { x: 1, y: 2, z: -2 },
-        rotation: { x: 0, y: -90, z: 0 }, // rotation: { x: 0, y: -90, z: 0 },
+        position: { x: -1.5, y: 2, z: -2 }, // position: { x: 1, y: 2, z: -2 },
+        rotation: { x: 0, y: 0, z: 0 }, // rotation: { x: 0, y: -90, z: 0 },
         menuContainer: menuMesh
     }
 
@@ -240,41 +239,41 @@ const animate = () => {
         world.execute(delta, elapsedTime);
         controls.update();
 
-        INTERSECTION = undefined;
-        if (controller1.userData.isSelecting === true) {
+        // INTERSECTION = undefined;
+        // if (controller1.userData.isSelecting === true) {
 
-            tempMatrix.identity().extractRotation(controller1.matrixWorld);
+        //     tempMatrix.identity().extractRotation(controller1.matrixWorld);
 
-            raycaster.ray.origin.setFromMatrixPosition(controller1.matrixWorld);
-            raycaster.ray.direction.set(0, 0, - 1).applyMatrix4(tempMatrix);
+        //     raycaster.ray.origin.setFromMatrixPosition(controller1.matrixWorld);
+        //     raycaster.ray.direction.set(0, 0, - 1).applyMatrix4(tempMatrix);
 
-            const intersects = raycaster.intersectObjects([floor]);
+        //     const intersects = raycaster.intersectObjects([floor]);
 
-            if (intersects.length > 0) {
+        //     if (intersects.length > 0) {
 
-                INTERSECTION = intersects[0].point;
+        //         INTERSECTION = intersects[0].point;
 
-            }
+        //     }
 
-        } else if (controller2.userData.isSelecting === true) {
+        // } else if (controller2.userData.isSelecting === true) {
 
-            tempMatrix.identity().extractRotation(controller2.matrixWorld);
+        //     tempMatrix.identity().extractRotation(controller2.matrixWorld);
 
-            raycaster.ray.origin.setFromMatrixPosition(controller2.matrixWorld);
-            raycaster.ray.direction.set(0, 0, - 1).applyMatrix4(tempMatrix);
+        //     raycaster.ray.origin.setFromMatrixPosition(controller2.matrixWorld);
+        //     raycaster.ray.direction.set(0, 0, - 1).applyMatrix4(tempMatrix);
 
-            const intersects = raycaster.intersectObjects([floor]);
+        //     const intersects = raycaster.intersectObjects([floor]);
 
-            if (intersects.length > 0) {
+        //     if (intersects.length > 0) {
 
-                INTERSECTION = intersects[0].point;
+        //         INTERSECTION = intersects[0].point;
 
-            }
+        //     }
 
-        }
-        if (INTERSECTION) marker.position.copy(INTERSECTION);
+        // }
+        // if (INTERSECTION) marker.position.copy(INTERSECTION);
 
-        marker.visible = INTERSECTION !== undefined;
+        // marker.visible = INTERSECTION !== undefined;
 
         renderer.render(scene, camera);
     });

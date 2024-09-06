@@ -14,7 +14,7 @@ import * as THREE from 'three';
  * @param {number} [scale=1] - Skala model saat di-load.
  * @param {function} callback - Fungsi callback yang akan dipanggil setelah model dimuat.
  */
-export const loadModel = (filePath, world, options = {}, scale = 1, callback) => {
+export const loadModel = (filePath, world, options = {}, scale = 1, position = { x: 0, y: 0, z: 0 }, callback) => {
     const { requiredFeatures = [], isObject = false, isPhysique = false } = options;
 
     let loader;
@@ -59,7 +59,10 @@ export const loadModel = (filePath, world, options = {}, scale = 1, callback) =>
                 }
                 if (isObject && loadedModel.scene) {
                     entity.addComponent(Object3D, { object: loadedModel.scene });
-                    loadedModel.scene.position.z = -2;
+                    
+                    loadedModel.scene.position.x = position.x;
+                    loadedModel.scene.position.y = position.y;
+                    loadedModel.scene.position.z = position.z;
                 }
             });
 

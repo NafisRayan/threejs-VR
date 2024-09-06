@@ -10,21 +10,21 @@ export const useTemplate = () => {
 
     let select = false;
 
-    const onSelectStart = () => {
-        select = true;
-    }
+    // const onSelectStart = () => {
+    //     select = true;
+    // }
 
-    const onSelectEnd = () => {
-        select = false;
-        if (initIntersection) {
-            const offsetPosition = { x: - INTERSECTION.x, y: - INTERSECTION.y, z: - INTERSECTION.z, w: 1 };
-            const offsetRotation = new THREE.Quaternion();
-            const transform = new XRRigidTransform(offsetPosition, offsetRotation);
-            const teleportSpaceOffset = baseReferenceSpace.getOffsetReferenceSpace(transform);
+    // const onSelectEnd = () => {
+    //     select = false;
+    //     if (initIntersection) {
+    //         const offsetPosition = { x: - INTERSECTION.x, y: - INTERSECTION.y, z: - INTERSECTION.z, w: 1 };
+    //         const offsetRotation = new THREE.Quaternion();
+    //         const transform = new XRRigidTransform(offsetPosition, offsetRotation);
+    //         const teleportSpaceOffset = baseReferenceSpace.getOffsetReferenceSpace(transform);
 
-            initRenderer.xr.setReferenceSpace(teleportSpaceOffset);
-        }
-    }
+    //         initRenderer.xr.setReferenceSpace(teleportSpaceOffset);
+    //     }
+    // }
 
     // raycaster
     initRaycaster = new THREE.Raycaster();
@@ -54,17 +54,17 @@ export const useTemplate = () => {
     initRenderer = new THREE.WebGLRenderer({ antialias: true });
     initRenderer.setPixelRatio(window.devicePixelRatio);
     initRenderer.setSize(window.innerWidth, window.innerHeight);
-    initRenderer.xr.addEventListener('sessionstart', () => {
-        baseReferenceSpace = initRenderer.xr.getReferenceSpace();
-    });
+    // initRenderer.xr.addEventListener('sessionstart', () => {
+    //     baseReferenceSpace = initRenderer.xr.getReferenceSpace();
+    // });
     initRenderer.xr.enabled = true;
 
     // marker
-    initMarker = new THREE.Mesh(
-        new THREE.CircleGeometry(0.25, 32).rotateX(- Math.PI / 2),
-        new THREE.MeshBasicMaterial({ color: 0xbcbcbc })
-    );
-    initScene.add(initMarker);
+    // initMarker = new THREE.Mesh(
+    //     new THREE.CircleGeometry(0.25, 32).rotateX(- Math.PI / 2),
+    //     new THREE.MeshBasicMaterial({ color: 0xbcbcbc })
+    // );
+    // initScene.add(initMarker);
 
     // floor
     initFloor = new THREE.Mesh(
@@ -81,30 +81,30 @@ export const useTemplate = () => {
     initController1 = initRenderer.xr.getController(0);
     initController2 = initRenderer.xr.getController(1);
 
-    initController1.addEventListener('selectstart', onSelectStart);
-    initController1.addEventListener('selectend', onSelectEnd);
-    initController1.addEventListener('connected', function (event) {
+    // initController1.addEventListener('selectstart', onSelectStart);
+    // initController1.addEventListener('selectend', onSelectEnd);
+    // initController1.addEventListener('connected', function (event) {
 
-        this.add(buildController(event.data));
+    //     this.add(buildController(event.data));
 
-    });
-    initController1.addEventListener('disconnected', function () {
+    // });
+    // initController1.addEventListener('disconnected', function () {
 
-        this.remove(this.children[0]);
+    //     this.remove(this.children[0]);
 
-    });
-    initController2.addEventListener('selectstart', onSelectStart);
-    initController2.addEventListener('selectend', onSelectEnd);
-    initController2.addEventListener('connected', function (event) {
+    // });
+    // initController2.addEventListener('selectstart', onSelectStart);
+    // initController2.addEventListener('selectend', onSelectEnd);
+    // initController2.addEventListener('connected', function (event) {
 
-        this.add(buildController(event.data));
+    //     this.add(buildController(event.data));
 
-    });
-    initController2.addEventListener('disconnected', function () {
+    // });
+    // initController2.addEventListener('disconnected', function () {
 
-        this.remove(this.children[0]);
+    //     this.remove(this.children[0]);
 
-    });
+    // });
 
     initScene.add(initController1);
     initScene.add(initController2);
@@ -121,29 +121,29 @@ export const useTemplate = () => {
 
 
 
-    const buildController = (data) => {
-        let geometry, material;
+    // const buildController = (data) => {
+    //     let geometry, material;
 
-        switch (data.targetRayMode) {
+    //     switch (data.targetRayMode) {
 
-            case 'tracked-pointer':
+    //         case 'tracked-pointer':
 
-                geometry = new THREE.BufferGeometry();
-                geometry.setAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, - 1], 3));
-                geometry.setAttribute('color', new THREE.Float32BufferAttribute([0.5, 0.5, 0.5, 0, 0, 0], 3));
+    //             geometry = new THREE.BufferGeometry();
+    //             geometry.setAttribute('position', new THREE.Float32BufferAttribute([0, 0, 0, 0, 0, - 1], 3));
+    //             geometry.setAttribute('color', new THREE.Float32BufferAttribute([0.5, 0.5, 0.5, 0, 0, 0], 3));
 
-                material = new THREE.LineBasicMaterial({ vertexColors: true, blending: THREE.AdditiveBlending });
+    //             material = new THREE.LineBasicMaterial({ vertexColors: true, blending: THREE.AdditiveBlending });
 
-                return new THREE.Line(geometry, material);
+    //             return new THREE.Line(geometry, material);
 
-            case 'gaze':
+    //         case 'gaze':
 
-                geometry = new THREE.RingGeometry(0.02, 0.04, 32).translate(0, 0, - 1);
-                material = new THREE.MeshBasicMaterial({ opacity: 0.5, transparent: true });
-                return new THREE.Mesh(geometry, material);
+    //             geometry = new THREE.RingGeometry(0.02, 0.04, 32).translate(0, 0, - 1);
+    //             material = new THREE.MeshBasicMaterial({ opacity: 0.5, transparent: true });
+    //             return new THREE.Mesh(geometry, material);
 
-        }
-    }
+    //     }
+    // }
 
     return {
         _create,
@@ -156,7 +156,6 @@ export const useTemplate = () => {
         initController1,
         initController2,
         initIntersection,
-        initMarker,
         initFloor
     }
 }
