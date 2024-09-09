@@ -9,6 +9,7 @@ import { createText } from 'three/addons/webxr/Text2D.js';
 import { Intersectable } from '../composables/src/components/intersectableComponent.js';
 import { Object3D } from '../composables/src/components/Object3DComponent.js';
 import { Draggable } from '../composables/src/components/DraggableComponent.js';
+import { Panel } from '../composables/src/components/PanelComponent.js';
 
 const container = ref(null);
 let scene, renderer, camera, controls, room, raycaster;
@@ -16,7 +17,6 @@ let controller1, controller2, controllerGrip1, controllerGrip2, handPointer1, ha
 let leftHand, rightHand, world, INTERSECTION, marker, floor;
 let clock;
 
-let panel;
 var object;
 let menuMesh;
 let exitButton, exitText;
@@ -35,6 +35,7 @@ onMounted(() => {
     createHand();
 
     loadedObject();
+    createPanel();
     animate();
 });
 
@@ -109,15 +110,6 @@ const createButton = () => {
 
 
 const loadedObject = () => {
-    const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.15 / 10), new THREE.MeshLambertMaterial({ color: 0xffffff }));
-    cube.position.set(0, 2, 0);
-    scene.add(cube);
-
-    const entity = world.createEntity();
-    entity.addComponent(Intersectable);
-    entity.addComponent(Object3D, { object: cube });
-    entity.addComponent(Draggable);
-
     const options = {
         requiredFeatures: ['handRay'],
         isObject: true,
@@ -224,27 +216,47 @@ const createHand = () => {
     scene.add(leftHand);
     scene.add(rightHand);
 
-    panel = {
-        layers: 3,
-        color: '#1A1A1A',
-        scene: scene,
-        world: world,
-        renderer: renderer,
-        isSide: true,
-        camera: camera,
-        padding: 0.025,
-        position: { x: -0.5, y: 2, z: -1 }, // position: { x: 1, y: 2, z: -2 },
-        rotation: { x: 0, y: 0, z: 0 }, // rotation: { x: 0, y: -90, z: 0 },
-        menuContainer: menuMesh
-    }
-
     const options = {
         requiredFeatures: ['instruction', 'handRay', 'draggable', 'panel'], // button, draggable, handRay, instruction
         handPointers: [handPointer1, handPointer2],
         controllers: [controller1, controller2],
-        panel: [panel],
+        panel: [renderer, scene, camera]
+
     };
     register(world, options);
+}
+
+const createPanel = () => {
+    const panelOptions1 = {
+        isSide: true,
+        position: { x: -0.5, y: 2, z: -1 }, // position: { x: 1, y: 2, z: -2 },
+        rotation: { x: 0, y: 0, z: 0 }, // rotation: { x: 0, y: -90, z: 0 },
+    }
+    const panelOptions2 = {
+        isSide: true,
+        position: { x: -1.1, y: 2, z: -1 }, // position: { x: 1, y: 2, z: -2 },
+        rotation: { x: 0, y: 0, z: 0 }, // rotation: { x: 0, y: -90, z: 0 },
+    }
+
+    const panel1 = new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.MeshBasicMaterial({ color: 0x2A2A2A }));
+    scene.add(panel1);
+    panel1.add(menuMesh)
+
+    const panel2 = new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.MeshBasicMaterial({ color: 0x1A1A1A }));
+    scene.add(panel2);
+
+    const panelEntity1 = world.createEntity();
+    panelEntity1.addComponent(Panel, panelOptions1);
+    panelEntity1.addComponent(Object3D, { object: panel1 });
+    panelEntity1.addComponent(Intersectable);
+    panelEntity1.addComponent(Draggable)
+
+
+    const panelEntity2 = world.createEntity();
+    panelEntity2.addComponent(Panel, panelOptions2);
+    panelEntity2.addComponent(Object3D, { object: panel2 });
+    panelEntity2.addComponent(Intersectable);
+    panelEntity2.addComponent(Draggable)
 }
 
 const animate = () => {
@@ -255,43 +267,6 @@ const animate = () => {
         const elapsedTime = clock.elapsedTime;
         world.execute(delta, elapsedTime);
         controls.update();
-
-        // INTERSECTION = undefined;
-        // if (controller1.userData.isSelecting === true) {
-
-        //     tempMatrix.identity().extractRotation(controller1.matrixWorld);
-
-        //     raycaster.ray.origin.setFromMatrixPosition(controller1.matrixWorld);
-        //     raycaster.ray.direction.set(0, 0, - 1).applyMatrix4(tempMatrix);
-
-        //     const intersects = raycaster.intersectObjects([floor]);
-
-        //     if (intersects.length > 0) {
-
-        //         INTERSECTION = intersects[0].point;
-
-        //     }
-
-        // } else if (controller2.userData.isSelecting === true) {
-
-        //     tempMatrix.identity().extractRotation(controller2.matrixWorld);
-
-        //     raycaster.ray.origin.setFromMatrixPosition(controller2.matrixWorld);
-        //     raycaster.ray.direction.set(0, 0, - 1).applyMatrix4(tempMatrix);
-
-        //     const intersects = raycaster.intersectObjects([floor]);
-
-        //     if (intersects.length > 0) {
-
-        //         INTERSECTION = intersects[0].point;
-
-        //     }
-
-        // }
-        // if (INTERSECTION) marker.position.copy(INTERSECTION);
-
-        // marker.visible = INTERSECTION !== undefined;
-
         renderer.render(scene, camera);
     });
 }
