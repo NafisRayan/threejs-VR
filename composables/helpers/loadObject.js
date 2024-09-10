@@ -1,8 +1,8 @@
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
-import { Object3D } from './src/components/Object3DComponent.js';
-import { Intersectable } from './src/components/intersectableComponent.js';
+import { Object3D } from '../components/Object3DComponent.js';
+import { Intersectable } from '../components/intersectableComponent.js';
 import * as THREE from 'three';
 
 /**

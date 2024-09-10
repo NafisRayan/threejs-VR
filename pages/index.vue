@@ -1,15 +1,15 @@
 <script setup>
 import * as THREE from 'three';
 import { onMounted } from 'vue';
-import { useTemplate } from '../composables/useTemplate.js';
-import { loadModel } from '../composables/loadObject.js';
-import { useHand } from '../composables/useHand.js';
-import { register } from '../composables/src/helpers/register.js';
+import { useTemplate } from '../composables/helpers/useTemplate.js';
+import { loadModel } from '../composables/helpers/loadObject.js';
+import { useHand } from '../composables/helpers/useHand.js';
+import { register } from '../composables/helpers/register.js';
 import { createText } from 'three/addons/webxr/Text2D.js';
-import { Intersectable } from '../composables/src/components/intersectableComponent.js';
-import { Object3D } from '../composables/src/components/Object3DComponent.js';
-import { Draggable } from '../composables/src/components/DraggableComponent.js';
-import { Panel } from '../composables/src/components/PanelComponent.js';
+import { Intersectable } from '../composables/components/intersectableComponent.js';
+import { Object3D } from '../composables/components/Object3DComponent.js';
+import { Draggable } from '../composables/components/DraggableComponent.js';
+import { Panel } from '../composables/components/PanelComponent.js';
 
 const container = ref(null);
 let scene, renderer, camera, controls, room, raycaster;
@@ -217,27 +217,14 @@ const createHand = () => {
     scene.add(rightHand);
 
     const options = {
-        requiredFeatures: ['instruction', 'handRay', 'draggable', 'panel'], // button, draggable, handRay, instruction
+        requiredFeatures: ['instruction', 'handRay', 'draggable'], // button, draggable, handRay, instruction
         handPointers: [handPointer1, handPointer2],
         controllers: [controller1, controller2],
-        panel: [renderer, scene, camera]
-
     };
     register(world, options);
 }
 
 const createPanel = () => {
-    const panelOptions1 = {
-        isSide: true,
-        position: { x: -0.5, y: 2, z: -1 }, // position: { x: 1, y: 2, z: -2 },
-        rotation: { x: 0, y: 0, z: 0 }, // rotation: { x: 0, y: -90, z: 0 },
-    }
-    const panelOptions2 = {
-        isSide: true,
-        position: { x: -1.1, y: 2, z: -1 }, // position: { x: 1, y: 2, z: -2 },
-        rotation: { x: 0, y: 0, z: 0 }, // rotation: { x: 0, y: -90, z: 0 },
-    }
-
     const panel1 = new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.MeshBasicMaterial({ color: 0x2A2A2A }));
     scene.add(panel1);
     panel1.add(menuMesh)
@@ -245,18 +232,26 @@ const createPanel = () => {
     const panel2 = new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.MeshBasicMaterial({ color: 0x1A1A1A }));
     scene.add(panel2);
 
-    const panelEntity1 = world.createEntity();
-    panelEntity1.addComponent(Panel, panelOptions1);
-    panelEntity1.addComponent(Object3D, { object: panel1 });
-    panelEntity1.addComponent(Intersectable);
-    panelEntity1.addComponent(Draggable)
+    const panelOptions = [
+        {
+            panel: panel1,
+            isSide: true,
+            position: { x: -0.5, y: 2, z: -1 },
+            rotation: { x: 0, y: 0, z: 0 },
+        },
+        {
+            panel: panel2,
+            isSide: true,
+            position: { x: -1.1, y: 2, z: -1 },
+            rotation: { x: 0, y: 0, z: 0 },
+        }
+    ]
 
-
-    const panelEntity2 = world.createEntity();
-    panelEntity2.addComponent(Panel, panelOptions2);
-    panelEntity2.addComponent(Object3D, { object: panel2 });
-    panelEntity2.addComponent(Intersectable);
-    panelEntity2.addComponent(Draggable)
+    const options = {
+        requiredFeatures: ['panel'],
+        panel: panelOptions
+    };
+    register(world, options);
 }
 
 const animate = () => {

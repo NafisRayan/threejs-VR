@@ -2,16 +2,16 @@ import { ButtonSystem } from '../systems/ButtonSystem.js';
 import { DraggableSystem } from '../systems/draggableSystem.js';
 import { HandRaySystem } from '../systems/handRaySystem.js';
 import { InstructionSystem } from '../systems/InstructionSystem.js';
+import { PanelSystem } from '../systems/PanelSystem.js';
 
 import { Button } from '../components/ButtonComponent.js';
 import { Intersectable } from '../components/intersectableComponent.js';
 import { Draggable } from '../components/DraggableComponent.js';
 import { HandsInstructionText } from '../components/HandsInstructionText.js';
 import { Object3D } from '../components/Object3DComponent.js'
+import { Panel } from '../components/PanelComponent.js';
 
 import * as THREE from 'three';
-import { Panel } from '../components/PanelComponent.js';
-import { PanelSystem } from '../systems/PanelSystem.js';
 
 
 export const register = (world, options) => {
@@ -53,6 +53,30 @@ export const register = (world, options) => {
             case val.includes('panel'):
                 world.registerComponent(Panel);
                 world.registerSystem(PanelSystem);
+
+                let panelEntities = [];
+
+                for (let i = 0; i < options.panel.length; i++) {
+                    let panelEntity = world.createEntity();
+
+                    panelEntity.addComponent(Panel, {
+                        isSide: options.panel[i].isSide,
+                        position: options.panel[i].position,
+                        rotation: options.panel[i].rotation
+                    });
+
+                    panelEntity.addComponent(Object3D, {
+                        object: options.panel[i].panel
+                    });
+
+                    panelEntities.push(panelEntity);
+                }
+
+                panelEntities.forEach(entity => {
+                    entity.addComponent(Intersectable);
+                    entity.addComponent(Draggable);
+                });
+
                 break;
 
             default:
